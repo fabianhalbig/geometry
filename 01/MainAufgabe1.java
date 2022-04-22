@@ -8,32 +8,29 @@ public class MainAufgabe1 {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		String path = "";
+		String pathZuStrecken = "C:\\Users\\Fabian\\Desktop\\Master\\Geometry\\01\\strecken";
+		String s1000 = "\\s_1000_1.dat";
+		String s10000 = "\\s_10000_1.dat";
+		String s100000 = "\\s_100000_1.dat";
 
-		ArrayList<Strecke> strecken1 = einlesen(path + "\\s_1000_1.dat");
-		ArrayList<Strecke> strecken2 = einlesen(path + "\\s_10000_1.dat");
-		ArrayList<Strecke> strecken3 = einlesen(path + "\\s_100000_1.dat");
-		
+		ArrayList<Strecke> strecken = einlesen(pathZuStrecken + s1000);
+
 		int streckencount = 0;
 		
 		long starttime = System.nanoTime();
 
-		while(strecken1.size() > 1) {
-			
-			for(int i = 1; i < strecken1.size(); i++) {
-				
-				if(strecken1.get(0).ccw(strecken1.get(i))) {
+		while(strecken.size() > 1) {
+			for(int i = 1; i < strecken.size(); i++) {
+				if(strecken.get(0).ccw(strecken.get(i)) && strecken.get(i).ccw(strecken.get(1))) {
 					streckencount += 1;
 				}
 			}
-			strecken1.remove(0);
-			
+			strecken.remove(0);
 		}
-		
 		long endtime = System.nanoTime() - starttime;
 		
-		System.out.println("Anzahl sich schneidender Geraden "+ streckencount+" in einer Zeit von " + TimeUnit.MILLISECONDS.convert(endtime, TimeUnit.NANOSECONDS) + " Millisekunden");
-		
+		System.out.println("Anzahl an Schnittpunkten: "+ streckencount + "\n" 
+		+  "Aufgewendete Zeit: " + TimeUnit.MILLISECONDS.convert(endtime, TimeUnit.NANOSECONDS) + " ms");		
 		
 	}
 
