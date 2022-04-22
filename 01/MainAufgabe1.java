@@ -8,7 +8,7 @@ public class MainAufgabe1 {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		String pathZuStrecken = "C:\\Users\\Fabian\\Desktop\\Master\\Geometry\\01\\strecken";
+		String pathZuStrecken = "";
 		String s1000 = "\\s_1000_1.dat";
 		String s10000 = "\\s_10000_1.dat";
 		String s100000 = "\\s_100000_1.dat";
