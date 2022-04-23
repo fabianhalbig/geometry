@@ -9,8 +9,25 @@ public class Polygon {
     }
 
     public double getArea(Polygon polygon) {
-        //TODO: calculate area of polygon
-        return 0.0;
+        double x = 0.0;
+        double y = 0.0;
+        double area = 0.0;
+        int j = polygon.getPoints().size() - 1;
+        //create final values of points from differences
+        ArrayList<Point> finalPoints = new ArrayList<Point>();
+        for (int k = 0; k < polygon.getPoints().size(); k++) {
+            double newX = polygon.getPoints().get(k).getX();
+            double newY = polygon.getPoints().get(k).getY();
+            finalPoints.add(new Point(x + newX, y + newY));
+            x += newX;
+            y += newY;
+        }
+        //calcualte area based on created point list
+        for (int i = 0; i < finalPoints.size(); i++) {
+            area += (finalPoints.get(j).getX() + finalPoints.get(i).getX()) * (finalPoints.get(j).getY() - finalPoints.get(i).getY());
+            j = i;
+        }
+        return Math.abs(Math.round(area / 2.0 * 1000.0) / 1000.0);
     }
 
     public ArrayList<Point> getPoints() {
