@@ -8,16 +8,16 @@ public class Polygon {
         this.points = points;
     }
 
-    public double getArea(Polygon polygon) {
+    public double getArea() {
         double x = 0.0;
         double y = 0.0;
         double area = 0.0;
-        int j = polygon.getPoints().size() - 1;
+        int j = this.points.size() - 1;
         //create final values of points from differences
         ArrayList<Point> finalPoints = new ArrayList<Point>();
-        for (int k = 0; k < polygon.getPoints().size(); k++) {
-            double newX = polygon.getPoints().get(k).getX();
-            double newY = polygon.getPoints().get(k).getY();
+        for (int k = 0; k < this.points.size(); k++) {
+            double newX = this.points.get(k).getX();
+            double newY = this.points.get(k).getY();
             finalPoints.add(new Point(x + newX, y + newY));
             x += newX;
             y += newY;
