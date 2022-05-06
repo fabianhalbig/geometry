@@ -10,6 +10,15 @@ public class Bundesland {
         this.polygons = polygons;
     }
 
+    public boolean bundeslandContainsCitey(Point q) {
+        for (Polygon p:polygons) {
+            if (p.pointInPolygon(q)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getName() {
         return name;
     }
@@ -18,11 +27,11 @@ public class Bundesland {
         this.name = name;
     }
 
-    public ArrayList<Polygon> getPoints() {
+    public ArrayList<Polygon> getPolygons() {
         return polygons;
     }
 
-    public void setPoints(ArrayList<Polygon> polygons) {
+    public void getPolygons(ArrayList<Polygon> polygons) {
         this.polygons = polygons;
     }
 }

@@ -12,7 +12,7 @@ public class Polygon {
     public double getArea() {
         double area = 0.0;
         int j = this.points.size() - 1;
-        for (int i = 0; i < this.getPoints().size(); i++) {
+        for (int i = 0; i < this.getPoints().size() - 1; i++) {
             area += (this.getPoints().get(j).getX() + this.getPoints().get(i).getX()) *
              (this.getPoints().get(j).getY() - this.getPoints().get(i).getY());
             j = i;
