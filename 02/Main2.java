@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import aufg_02.Bundesland;
+import aufg_02.Point;
+import aufg_02.Polygon;
+
 
 public class Main2 {
 
@@ -82,7 +86,7 @@ public class Main2 {
 
     
     
-	public static ArrayList<Bundesland> readFile(String path) throws FileNotFoundException{
+    public static ArrayList<Bundesland> readFile(String path) throws FileNotFoundException{
 		ArrayList<Bundesland> states = new ArrayList<Bundesland>();
 		ArrayList<Point> pointsForPolygon = new ArrayList<Point>();
 		ArrayList<Polygon> polygonForBundesland = new ArrayList<Polygon>();
@@ -106,17 +110,16 @@ public class Main2 {
 		fileString = fileString.substring(fileString.indexOf("<g>") );
 		fileString = fileString.substring(0, fileString.indexOf("</g>"));
 		bundeslandElements = fileString.split("\"/>");
-		
-
+		bundeslandElements = Arrays.copyOf(bundeslandElements, bundeslandElements.length-1);
 		
 		for (String bElements : bundeslandElements){
 			if(bElements.contains("id=")){
 				bundeslandName = bElements.substring(bElements.indexOf("id="));
 				bundeslandName = bundeslandName.substring(0, bundeslandName.indexOf("fill"));
 				bundeslandName = bundeslandName.split("\"")[1];
-				//System.out.println(bundeslandName);
 				
 				polygons = bElements.split("\nz");
+				polygons = Arrays.copyOf(polygons, polygons.length-1);
 			}
 			
 			
@@ -142,27 +145,6 @@ public class Main2 {
 					points = list.toArray(new String[0]);
 				}
 				
-				/*
-				Point startPunkt = pointsForPolygonClone.get(0);
-				pointsForPolygonClone.remove(0);
-				
-				Point endPunkt = pointsForPolygonClone.get(pointsForPolygonClone.size()-1);
-				pointsForPolygonClone.remove(pointsForPolygonClone.size()-1);
-				
-				Point standPunkt = startPunkt;
-				
-				for (Point point : pointsForPolygonClone) {
-					
-					double newX = standPunkt.getX() + point.getX();
-					double newY = standPunkt.getY() + point.getY();
-					
-					standPunkt.setX(newX);
-					standPunkt.setX(newY);
-					
-					System.out.println(point.x);
-				}
-				*/
-				
 				Point startPunkt = null;
 				Point standPunkt = null;
 				
@@ -170,8 +152,6 @@ public class Main2 {
 					if(!point.trim().isEmpty()){
 						if(point.startsWith("M")) {
 							startPunkt = new Point(Double.parseDouble(point.substring(1).split(",")[0]) , Double.parseDouble(point.substring(1).split(",")[1]));
-							//System.out.println(bundeslandName);
-							//System.out.println(startPunkt.x);
 							pointsForPolygon.add(startPunkt);
 							standPunkt = new Point(startPunkt.getX(), startPunkt.getY()); // startPunkt;
 						}
@@ -179,7 +159,6 @@ public class Main2 {
 							
 							if(point.contains("H")) {
 								point= point.split("H")[0];
-								//System.out.println(point);
 							}
 							
 							if(point.startsWith("L")) {
@@ -195,30 +174,23 @@ public class Main2 {
 								standPunkt.setX(round(newX,3));
 								standPunkt.setY(round(newY,3));
 								
-								pointsForPolygon.add(standPunkt);
-								
-								/*
-								if(bundeslandName.contains("Mecklenburg-Vorpommern") && pointsForPolygon.size() < 3) {
-									System.out.println("startpunkt"+startPunkt.x);
-									System.out.println(newX);
-									System.out.println(newY);
-									System.out.println(newPoint.x);
-									System.out.println(newPoint.y);
-								}
-								*/
+								Point clonePoint = new Point(standPunkt.getX(), standPunkt.getY());
+								pointsForPolygon.add(clonePoint);
 							}
 						}
 						
 					}
 				}
-				
-				//System.out.println(pointsForPolygon.get(1).getX());
+
 				ArrayList<Point> pointsForPolygonClone = (ArrayList<Point>) pointsForPolygon.clone();
 				
 				newPolygon = new Polygon(pointsForPolygonClone);		
-				pointsForPolygon.clear();
+				
 				polygonForBundesland.add(newPolygon);
-				//System.out.println(newPolygon.getPoints());
+
+				
+				
+				pointsForPolygon.clear();
 			}
 			
 			ArrayList<Polygon> polygonForBundeslandClone = (ArrayList<Polygon>) polygonForBundesland.clone();
