@@ -10,8 +10,8 @@ public class Bundesland {
         this.polygons = polygons;
     }
 
-    public boolean bundeslandContainsCitey(Point q) {
-        for (Polygon p:polygons) {
+    public boolean bundeslandContainsCity(Point q) {
+        for (Polygon p:this.polygons) {
             if (p.pointInPolygon(q)) {
                 return true;
             }

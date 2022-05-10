@@ -14,77 +14,64 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import aufg_02.Bundesland;
-import aufg_02.Point;
-import aufg_02.Polygon;
 
 
 public class Main2 {
 
     public static void main(String[] args) throws IOException {
 
-    	String path = "C:\\Users\\Fabian\\Desktop\\Master\\Geometry\\02\\data\\DeutschlandMitStaedten.svg";
+    	String path = "\\data\\DeutschlandMitStaedten.svg";
 		
-		ArrayList<Bundesland> bundeslaender = readFile(path);
+		ArrayList<Bundesland> states = readFile(path);
 		ArrayList<City> cities = getCities(path);
 
-		//Get Area of state
-		//!letztes element von bundeslaender und letztes polygon pro bundesland doppelt!
-		for (Bundesland b:bundeslaender) {
-			System.out.println("Name :" + b.getName());
-			System.out.println("Anzahl Polygone :" + b.getPolygons().size());
-			int i = 0;
-			for(Polygon p: b.getPolygons()) {
-				System.out.println("Size Polygon" + i+ ": " + p.getArea());
-				i++;
-			}
-		}
-
-		System.out.println("Size cities: " + cities.size());
-		//Map cities to state -> mit while und zugewiesene stadt entfernen? 
-		//nicht alle gefunden, außer München und Magdeburg ==> Bayern und Sachsen-Anhalt korrekt eingelesen
-		Map <City, Bundesland> citeInstate = new HashMap<City, Bundesland>();
-		for (City c: cities) {
-			for(Bundesland b:bundeslaender) {
-				if (b.bundeslandContainsCitey(c.getPoint())) {
-					citeInstate.put(c, b);
-					System.out.println("City: " + c.getName() + " | " + "State: " + b.getName());
-				}
-			}
-		}
-
-		Point berlin = new Point(477, 256);
-
-		for (Point p:bundeslaender.get(13).getPolygons().get(1).getPoints()) {
-			System.out.println(p.getX() + "," + p.getY());
-
-		}
-
-
-    	/*
-		for (Bundesland n : bundeslaender){
-			System.out.println(n.getName());
-			System.out.println(n.getPoints());
-		}
-		*/
-    	//System.out.println(bundeslaender.get(8).name);
-    	//System.out.println(bundeslaender.get(8).polygons);
-    	//System.out.println(bundeslaender.get(8).polygons.get(0).points.get(0).getX());
-    	//System.out.println(bundeslaender.get(8).polygons.get(0).points.get(0).y);
-    	//System.out.println(bundeslaender.get(8).polygons.get(0).points.get(bundeslaender.get(8).polygons.get(0).points.size()-1).getX());
-    	//System.out.println(bundeslaender.get(8).polygons.get(0).points.get(bundeslaender.get(8).polygons.get(0).points.size()-1).y);
-    	//System.out.println(bundeslaender.get(8).polygons.get(0).points.get(bundeslaender.get(8).polygons.get(0).points.size()-2).getX());
-    	//System.out.println(bundeslaender.get(8).polygons.get(0).points.get(bundeslaender.get(8).polygons.get(0).points.size()-2).y);
-
-		
-
-
-
-
+		sysoutAreaOfState(states);
+		System.out.println("----------------------------");
+		sysoutCityAndState(states, cities);
 
 	}
 
-    
+	public static void sysoutAreaOfState(ArrayList<Bundesland> states) {
+		for (Bundesland state:states) {
+			double area = 0.0;
+			if (state.getPolygons().size() == 1) {
+				for(Polygon p: state.getPolygons()) {
+					area = area + p.getArea();
+				}
+			} else {
+				for(Polygon p: state.getPolygons()) {
+					if (p.polygonInOtherPolygons(state.getPolygons())) {
+						area = area - p.getArea();
+					} else {
+						area = area + p.getArea();
+					}
+				}
+			}
+			System.out.println("Area of " + state.getName() + ": " + roundOndThreeDecimal(Math.abs(area)));
+		}
+	}
+
+	//Map cities on smallest state (smaller polygons are overwring first value of bigger polygons)
+	public static void sysoutCityAndState(ArrayList<Bundesland> states, ArrayList<City> cities) {
+		Map <City, Bundesland> cityInState = new HashMap<City, Bundesland>();
+		while(cities.size() > 0 ) {
+			for(Bundesland b:states) {
+				if (b.bundeslandContainsCity(cities.get(0).getPoint())) {
+					cityInState.put(cities.get(0), b);
+				}
+			}
+			cities.remove(0);
+		}
+
+		for (Map.Entry<City, Bundesland> k:cityInState.entrySet()) {
+			System.out.println("Hauptstadt: " +  k.getKey().name + " | " + "Bundesland: "+  k.getValue().getName());
+		}
+	}
+
+
+	public static double roundOndThreeDecimal(double value) {
+		return Math.round(value * 1000.0) / 1000.0;
+	}
     
     public static ArrayList<Bundesland> readFile(String path) throws FileNotFoundException{
 		ArrayList<Bundesland> states = new ArrayList<Bundesland>();
@@ -103,7 +90,6 @@ public class Main2 {
 		try {
 			fileString = readFile(path,StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -153,7 +139,7 @@ public class Main2 {
 						if(point.startsWith("M")) {
 							startPunkt = new Point(Double.parseDouble(point.substring(1).split(",")[0]) , Double.parseDouble(point.substring(1).split(",")[1]));
 							pointsForPolygon.add(startPunkt);
-							standPunkt = new Point(startPunkt.getX(), startPunkt.getY()); // startPunkt;
+							standPunkt = new Point(startPunkt.getX(), startPunkt.getY()); 
 						}
 						else {
 							
@@ -183,13 +169,8 @@ public class Main2 {
 				}
 
 				ArrayList<Point> pointsForPolygonClone = (ArrayList<Point>) pointsForPolygon.clone();
-				
 				newPolygon = new Polygon(pointsForPolygonClone);		
-				
 				polygonForBundesland.add(newPolygon);
-
-				
-				
 				pointsForPolygon.clear();
 			}
 			
@@ -197,20 +178,17 @@ public class Main2 {
 			states.add(new Bundesland(bundeslandName, polygonForBundeslandClone));
 			polygonForBundesland.clear();
 		}
-		
+		scnr.close();
 		return states;
 	}
     
-	static String readFile(String path, Charset encoding)
-			  throws IOException
-			{
-			  byte[] encoded = Files.readAllBytes(Paths.get(path));
-			  return new String(encoded, encoding);
-			}
+	static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+	  	return new String(encoded, encoding);
+	}
 	
 	public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
-
 	    BigDecimal bd = BigDecimal.valueOf(value);
 	    bd = bd.setScale(places, RoundingMode.HALF_UP);
 	    return bd.doubleValue();
