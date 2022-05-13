@@ -9,7 +9,7 @@ public class Polygon {
         this.points = points;
     }
 
-    //calculate Area of polygon based on realtiv points
+    //calculate Area of polygon based on absolute points
     public double getArea() {
         double area = 0.0;
         ArrayList<Point> oneStartEnd = getPoints();
