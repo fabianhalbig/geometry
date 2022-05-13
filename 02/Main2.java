@@ -20,7 +20,7 @@ public class Main2 {
 
     public static void main(String[] args) throws IOException {
 
-    	String path = "\\data\\DeutschlandMitStaedten.svg";
+    	String path = "02/data/DeutschlandMitStaedten.svg";
 		
 		ArrayList<Bundesland> states = readFile(path);
 		ArrayList<City> cities = getCities(path);
@@ -47,7 +47,7 @@ public class Main2 {
 					}
 				}
 			}
-			System.out.println("Area of " + state.getName() + ": " + round(Math.abs(area), 3));
+			System.out.println("Fläche von " + state.getName() + ": " + round(Math.abs(area), 3));
 		}
 	}
 
