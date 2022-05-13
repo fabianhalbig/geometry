@@ -47,7 +47,7 @@ public class Main2 {
 					}
 				}
 			}
-			System.out.println("Area of " + state.getName() + ": " + roundOndThreeDecimal(Math.abs(area)));
+			System.out.println("Area of " + state.getName() + ": " + round(Math.abs(area), 3));
 		}
 	}
 
@@ -66,11 +66,6 @@ public class Main2 {
 		for (Map.Entry<City, Bundesland> k:cityInState.entrySet()) {
 			System.out.println("Hauptstadt: " +  k.getKey().name + " | " + "Bundesland: "+  k.getValue().getName());
 		}
-	}
-
-
-	public static double roundOndThreeDecimal(double value) {
-		return Math.round(value * 1000.0) / 1000.0;
 	}
     
     public static ArrayList<Bundesland> readFile(String path) throws FileNotFoundException{
