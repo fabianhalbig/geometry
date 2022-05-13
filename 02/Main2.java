@@ -98,77 +98,63 @@ public class Main2 {
 				bundeslandName = bElements.substring(bElements.indexOf("id="));
 				bundeslandName = bundeslandName.substring(0, bundeslandName.indexOf("fill"));
 				bundeslandName = bundeslandName.split("\"")[1];
-				
 				polygons = bElements.split("\nz");
 				polygons = Arrays.copyOf(polygons, polygons.length-1);
 			}
-			
-			
-			
 			for (String poly : polygons){
 				iteration +=1 ;
 				if(poly.length()>3){
-					
 					if(poly.contains(" d=\"")){
-						points = poly.substring(poly.indexOf(" d=\"")).split("\"")[1].split("\n");
+						points = poly.substring(poly.indexOf(" d=\""))
+						.split("\"")[1].split("\n");
 					} else{
 						points = poly.split("\n");
-
 					}
-
 				}
-				
 				if(points[0].isEmpty()){
 					List<String> list = new ArrayList<String>(Arrays.asList(points));
-					
 					list.remove("");
-					
 					points = list.toArray(new String[0]);
 				}
-				
 				Point startPunkt = null;
 				Point standPunkt = null;
-				
 				for (String point : points){
 					if(!point.trim().isEmpty()){
 						if(point.startsWith("M")) {
-							startPunkt = new Point(Double.parseDouble(point.substring(1).split(",")[0]) , Double.parseDouble(point.substring(1).split(",")[1]));
+							startPunkt = new Point(Double.parseDouble(point.substring(1)
+							.split(",")[0]) , Double.parseDouble(point.substring(1)
+							.split(",")[1]));
 							pointsForPolygon.add(startPunkt);
 							standPunkt = new Point(startPunkt.getX(), startPunkt.getY()); 
 						}
 						else {
-							
 							if(point.contains("H")) {
 								point= point.split("H")[0];
 							}
-							
 							if(point.startsWith("L")) {
-								Point newPoint = new Point(Double.parseDouble(point.substring(1).split(",")[0]) , Double.parseDouble(point.substring(1).split(",")[1]));
+								Point newPoint = new Point(Double.parseDouble(point.substring(1)
+								.split(",")[0]) , Double.parseDouble(point.substring(1)
+								.split(",")[1]));
 								pointsForPolygon.add(newPoint);
-
 							} else {
-								Point newPoint = new Point(Double.parseDouble(point.substring(1).split(",")[0]) , Double.parseDouble(point.substring(1).split(",")[1]));
-								
+								Point newPoint = new Point(Double.parseDouble(point.substring(1)
+								.split(",")[0]) , Double.parseDouble(point.substring(1)
+								.split(",")[1]));
 								double newX = standPunkt.getX() + newPoint.getX();
-								double newY = standPunkt.getY() + newPoint.getY();
-								
+								double newY = standPunkt.getY() + newPoint.getY();								
 								standPunkt.setX(round(newX,3));
-								standPunkt.setY(round(newY,3));
-								
+								standPunkt.setY(round(newY,3));								
 								Point clonePoint = new Point(standPunkt.getX(), standPunkt.getY());
 								pointsForPolygon.add(clonePoint);
 							}
-						}
-						
+						}	
 					}
 				}
-
 				ArrayList<Point> pointsForPolygonClone = (ArrayList<Point>) pointsForPolygon.clone();
 				newPolygon = new Polygon(pointsForPolygonClone);		
 				polygonForBundesland.add(newPolygon);
 				pointsForPolygon.clear();
 			}
-			
 			ArrayList<Polygon> polygonForBundeslandClone = (ArrayList<Polygon>) polygonForBundesland.clone();
 			states.add(new Bundesland(bundeslandName, polygonForBundeslandClone));
 			polygonForBundesland.clear();
