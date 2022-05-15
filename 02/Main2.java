@@ -33,21 +33,7 @@ public class Main2 {
 
 	public static void sysoutAreaOfState(ArrayList<Bundesland> states) {
 		for (Bundesland state:states) {
-			double area = 0.0;
-			if (state.getPolygons().size() == 1) {
-				for(Polygon p: state.getPolygons()) {
-					area = area + p.getArea();
-				}
-			} else {
-				for(Polygon p: state.getPolygons()) {
-					if (p.polygonInOtherPolygons(state.getPolygons())) {
-						area = area - p.getArea();
-					} else {
-						area = area + p.getArea();
-					}
-				}
-			}
-			System.out.println("Fläche von " + state.getName() + ": " + round(Math.abs(area), 3));
+			System.out.println("Fläche von " + state.getName() + ": " + state.getArea());
 		}
 	}
 
@@ -57,7 +43,13 @@ public class Main2 {
 		while(cities.size() > 0 ) {
 			for(Bundesland b:states) {
 				if (b.bundeslandContainsCity(cities.get(0).getPoint())) {
-					cityInState.put(cities.get(0), b);
+					if (cityInState.get(cities.get(0)) != null &&
+					 cityInState.get(cities.get(0)).getArea() > b.getArea()) {
+						cityInState.put(cities.get(0), b);
+					}
+					if (cityInState.put(cities.get(0), b) == null) {
+						cityInState.put(cities.get(0), b);
+					}
 				}
 			}
 			cities.remove(0);

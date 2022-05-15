@@ -19,6 +19,24 @@ public class Bundesland {
         return false;
     }
 
+    public double getArea() {
+        double area = 0.0;
+        if (this.getPolygons().size() == 1) {
+            for(Polygon p: this.getPolygons()) {
+                area = area + p.getArea();
+            }
+        } else {
+            for(Polygon p: this.getPolygons()) {
+                if (p.polygonInOtherPolygons(this.getPolygons())) {
+                    area = area - p.getArea();
+                } else {
+                    area = area + p.getArea();
+                }
+            }
+        }
+        return Main2.round(Math.abs(area), 3);
+    }
+
     public String getName() {
         return name;
     }
