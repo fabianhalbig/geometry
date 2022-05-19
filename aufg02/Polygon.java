@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Polygon {
 
@@ -23,60 +22,10 @@ public class Polygon {
         }
         return Math.abs(Math.round(area / 2.0 * 1000.0) / 1000.0);
     }
-
-    static boolean onSegmentHelper(Point p, Point q, Point r) {
-        if (q.x <= Math.max(p.x, r.x) &&
-            q.x >= Math.min(p.x, r.x) &&
-            q.y <= Math.max(p.y, r.y) &&
-            q.y >= Math.min(p.y, r.y)) {
-                return true;
-        }
-        return false;
-    }
- 
-    //Helper function for ccw
-    // 0 --> collinear
-    // 1 --> cw
-    // 2 --> ccw
-    static double orientationHelper(Point p, Point q, Point r) {
-        double val = (q.getY() - p.getY()) * (r.getX() - q.getX())
-                - (q.getX() - p.getX()) * (r.getY() - q.getY());
-        if (val == 0) {
-            return 0; // collinear
-        }
-        return (val > 0) ? 1 : 2;
-    }
  
     // The Helper-function for point in Polygon
     // True when lines intersect
-    static boolean doIntersectHelper(Point p1, Point q1,
-         Point p2, Point q2) {
-        double o1 = orientationHelper(p1, q1, p2);
-        double o2 = orientationHelper(p1, q1, q2);
-        double o3 = orientationHelper(p2, q2, p1);
-        double o4 = orientationHelper(p2, q2, q1);
 
-        if (o1 != o2 && o3 != o4) {
-            return true;
-        }
- 
-        // Special Cases
-        // p1, q1 and p2 are collinear and
-        if (o1 == 0 && onSegmentHelper(p1, p2, q1)) {
-            return true;
-        }
-        if (o2 == 0 && onSegmentHelper(p1, q2, q1)) {
-            return true;
-        }
-        if (o3 == 0 && onSegmentHelper(p2, p1, q2)) {
-            return true;
-        }
-        if (o4 == 0 && onSegmentHelper(p2, q1, q2)) {
-            return true;
-        }
-
-        return false;
-    }
  
     public boolean pointInPolygon(Point point) {
         ArrayList<Point> p = getPoints();
@@ -97,9 +46,9 @@ public class Polygon {
         do {
             int next = (i+1) % p.size();
 
-            if(doIntersectHelper(p.get(i), p.get(next), point, absolutePoint)) {
-                if (orientationHelper(p.get(i), point, p.get(next))==0) {
-                    return onSegmentHelper(p.get(i), point, p.get(next));
+            if(Point.doIntersectHelper(p.get(i), p.get(next), point, absolutePoint)) {
+                if (Point.orientationHelper(p.get(i), point, p.get(next))==0) {
+                    return Point.onSegmentHelper(p.get(i), point, p.get(next));
                 }
                 count++;
             }

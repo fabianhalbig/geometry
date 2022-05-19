@@ -9,11 +9,13 @@ public class MainAufgabe1 {
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		String pathZuStrecken = "";
-		String s1000 = "\\s_1000_1.dat";
-		String s10000 = "\\s_10000_1.dat";
-		String s100000 = "\\s_100000_1.dat";
+		String s1000 = "aufg01\\strecken\\s_1000_1.dat";
+		String s10000 = "aufg01\\strecken\\s_10000_1.dat";
+		String s100000 = "aufg01\\strecken\\s_100000_1.dat";
 
 		ArrayList<Strecke> strecken = einlesen(pathZuStrecken + s1000);
+
+		System.out.println(strecken.size());
 
 		int streckencount = 0;
 		
@@ -21,7 +23,7 @@ public class MainAufgabe1 {
 
 		while(strecken.size() > 1) {
 			for(int i = 1; i < strecken.size(); i++) {
-				if(strecken.get(0).ccw(strecken.get(i)) && strecken.get(i).ccw(strecken.get(1))) {
+				if (strecken.get(0).doIntersect(strecken.get(i))) {
 					streckencount += 1;
 				}
 			}
@@ -43,10 +45,8 @@ public class MainAufgabe1 {
 		   String line = scnr.nextLine();
 		   String[] points = line.split(" ");
 		   Strecke s = new Strecke(
-				   Double.parseDouble(points[0]),
-				   Double.parseDouble(points[1]),
-				   Double.parseDouble(points[2]),
-				   Double.parseDouble(points[3]));
+			   new Point(Double.parseDouble(points[0]), Double.parseDouble(points[1])),
+			   new Point(Double.parseDouble(points[2]), Double.parseDouble(points[3])));
 		   strecken.add(s);
 		}
 		scnr.close();

@@ -20,7 +20,7 @@ public class Main2 {
 
     public static void main(String[] args) throws IOException {
 
-    	String path = "02/data/DeutschlandMitStaedten.svg";
+    	String path = "aufg02/data/DeutschlandMitStaedten.svg";
 		
 		ArrayList<Bundesland> states = readFile(path);
 		ArrayList<City> cities = getCities(path);
@@ -46,10 +46,11 @@ public class Main2 {
 					if (cityInState.get(cities.get(0)) != null &&
 					 cityInState.get(cities.get(0)).getArea() > b.getArea()) {
 						cityInState.put(cities.get(0), b);
-					}
+					}  
 					if (cityInState.put(cities.get(0), b) == null) {
 						cityInState.put(cities.get(0), b);
 					}
+					break;
 				}
 			}
 			cities.remove(0);

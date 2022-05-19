@@ -68,7 +68,7 @@ public class Tests2 {
 
 
     public static ArrayList<Point> getBerlinAsPoylgon() throws FileNotFoundException {
-        String pathBerlin = "\\data\\berlinInputTest.svg";
+        String pathBerlin = "C:\\Users\\Fabian\\Desktop\\Master\\geometry\\aufg02\\data\\berlinInputTest.svg";
         //read in Berlin as test from other file 
         ArrayList<Point> pointBerlin = new ArrayList<Point>();
 		int countList = -1;
