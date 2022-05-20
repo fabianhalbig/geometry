@@ -11,7 +11,7 @@ public class Bundesland {
     }
 
     public boolean bundeslandContainsCity(Point q) {
-        for (Polygon p:this.polygons) {
+        for (Polygon p:polygons) {
             if (p.pointInPolygon(q)) {
                 return true;
             }
@@ -20,21 +20,11 @@ public class Bundesland {
     }
 
     public double getArea() {
-        double area = 0.0;
-        if (this.getPolygons().size() == 1) {
-            for(Polygon p: this.getPolygons()) {
-                area = area + p.getArea();
-            }
-        } else {
-            for(Polygon p: this.getPolygons()) {
-                if (p.polygonInOtherPolygons(this.getPolygons())) {
-                    area = area - p.getArea();
-                } else {
-                    area = area + p.getArea();
-                }
-            }
+        double sum = 0;
+        for (Polygon p: getPolygons()) {
+            sum = sum + p.getArea();
         }
-        return Main2.round(Math.abs(area), 3);
+        return Main2.round(sum, 3);
     }
 
     public String getName() {

@@ -20,7 +20,7 @@ public class Polygon {
                 (oneStartEnd.get(j).getY() - oneStartEnd.get(i).getY());
             j = i; 
         }
-        return Math.abs(Math.round(area / 2.0 * 1000.0) / 1000.0);
+        return Math.abs(Main2.round((area / 2.0), 3));
     }
  
     // The Helper-function for point in Polygon

@@ -20,21 +20,28 @@ public class Main2 {
 
     public static void main(String[] args) throws IOException {
 
-    	String path = "aufg02/data/DeutschlandMitStaedten.svg";
+    	String path = "aufg02\\data\\DeutschlandMitStaedten.svg";
+
+		//"aufg02\\data\\DeutschlandMitStaedten.svg"
+		//"aufg02\\data\\Schleswig-Holstein.svg"
 		
 		ArrayList<Bundesland> states = readFile(path);
-		ArrayList<City> cities = getCities(path);
 
-		sysoutAreaOfState(states);
-		System.out.println("----------------------------");
-		sysoutCityAndState(states, cities);
 
-	}
 
-	public static void sysoutAreaOfState(ArrayList<Bundesland> states) {
-		for (Bundesland state:states) {
-			System.out.println("Fläche von " + state.getName() + ": " + state.getArea());
+		//TODO: check polygons per state
+		for (Bundesland s: states) {
+			System.out.println(s.getName() + "|" + s.getArea() + "|" + s.getPolygons().size());
+
 		}
+
+
+
+
+		//ArrayList<City> cities = getCities(path);
+		//System.out.println("----------------------------");
+		//sysoutCityAndState(states, cities);
+
 	}
 
 	//Map cities on smallest state (smaller polygons are overwring first value of bigger polygons)
@@ -129,6 +136,8 @@ public class Main2 {
 								.split(",")[0]) , Double.parseDouble(point.substring(1)
 								.split(",")[1]));
 								pointsForPolygon.add(newPoint);
+								standPunkt.setX(newPoint.getX());
+								standPunkt.setY(newPoint.getY());
 							} else {
 								Point newPoint = new Point(Double.parseDouble(point.substring(1)
 								.split(",")[0]) , Double.parseDouble(point.substring(1)
