@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,26 +23,25 @@ public class Main2 {
 
     	String path = "aufg02\\data\\DeutschlandMitStaedten.svg";
 
-		//"aufg02\\data\\DeutschlandMitStaedten.svg"
-		//"aufg02\\data\\Schleswig-Holstein.svg"
 		
 		ArrayList<Bundesland> states = readFile(path);
+		
+		ArrayList<City> cities = getCities(path);
+		sysoutAreaOfState(states);
+		System.out.println("----------------------------");
+		Collections.shuffle(cities); //make sure output does not depend on order of input
+		sysoutCityAndState(states, cities);
+
+	}
 
 
 
-		//TODO: check polygons per state
+
+
+	public static void sysoutAreaOfState(ArrayList<Bundesland> states) {
 		for (Bundesland s: states) {
-			System.out.println(s.getName() + "|" + s.getArea() + "|" + s.getPolygons().size());
-
+			System.out.println(s.getName() + "|" + s.getAreaOfState());
 		}
-
-
-
-
-		//ArrayList<City> cities = getCities(path);
-		//System.out.println("----------------------------");
-		//sysoutCityAndState(states, cities);
-
 	}
 
 	//Map cities on smallest state (smaller polygons are overwring first value of bigger polygons)
@@ -51,13 +51,12 @@ public class Main2 {
 			for(Bundesland b:states) {
 				if (b.bundeslandContainsCity(cities.get(0).getPoint())) {
 					if (cityInState.get(cities.get(0)) != null &&
-					 cityInState.get(cities.get(0)).getArea() > b.getArea()) {
+					 cityInState.get(cities.get(0)).getAreaOfState() > b.getAreaOfState()) {
 						cityInState.put(cities.get(0), b);
 					}  
 					if (cityInState.put(cities.get(0), b) == null) {
 						cityInState.put(cities.get(0), b);
 					}
-					break;
 				}
 			}
 			cities.remove(0);

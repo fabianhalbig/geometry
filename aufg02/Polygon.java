@@ -25,8 +25,6 @@ public class Polygon {
  
     // The Helper-function for point in Polygon
     // True when lines intersect
-
- 
     public boolean pointInPolygon(Point point) {
         ArrayList<Point> p = getPoints();
 

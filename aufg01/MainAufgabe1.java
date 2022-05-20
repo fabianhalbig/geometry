@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MainAufgabe1 {
 
-	//TODO: update paper
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		String pathZuStrecken = "";

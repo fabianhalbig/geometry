@@ -19,12 +19,23 @@ public class Bundesland {
         return false;
     }
 
-    public double getArea() {
-        double sum = 0;
-        for (Polygon p: getPolygons()) {
-            sum = sum + p.getArea();
+    public double getAreaOfState() {
+        double area = 0;
+        for(Polygon p: getPolygons()) {
+            area = area + p.getArea();
         }
-        return Main2.round(sum, 3);
+
+        if (getPolygons().size() > 1) {
+            for(Polygon p: getPolygons()) {
+                for(Polygon q: getPolygons()) {
+                    if (p.pointInPolygon(q.getPoints().get(0))&& p!=q) {
+                        //minus 2 times, as polygon already added once in previous step
+                        area = area - 2*q.getArea();
+                    }
+                }
+            }
+        }
+        return Main2.round(Math.abs(area), 3);
     }
 
     public String getName() {
