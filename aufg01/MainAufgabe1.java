@@ -15,8 +15,6 @@ public class MainAufgabe1 {
 
 		ArrayList<Strecke> strecken = einlesen(pathZuStrecken + s1000);
 
-		System.out.println(strecken.size());
-
 		int streckencount = 0;
 		
 		long starttime = System.nanoTime();
