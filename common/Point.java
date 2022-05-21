@@ -33,7 +33,7 @@ public class Point {
         this.y = y;
     }
 
-    static boolean onSegmentHelper(Point p, Point q, Point r) {
+    public static boolean onSegmentHelper(Point p, Point q, Point r) {
         if (q.getX() <= Math.max(p.getX(), r.getX()) && q.getX() >= Math.min(p.getX(), r.getX()) &&
             q.getY() <= Math.max(p.getY(), r.getY()) && q.getY() >= Math.min(p.getY(), r.getY())) {
                 return true;
@@ -41,7 +41,7 @@ public class Point {
         return false;
     }
 
-    static int orientationHelper(Point p, Point q, Point r)
+    public static int orientationHelper(Point p, Point q, Point r)
     {
         double val = (q.getY() - p.getY()) * (r.getX() - q.getX()) -
                 (q.getX() - p.getX()) * (r.getY() - q.getY());
