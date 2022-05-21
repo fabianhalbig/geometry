@@ -35,7 +35,7 @@ public class Bundesland {
                 }
             }
         }
-        return Main2.round(Math.abs(area), 3);
+        return Main2.round(area, 3);
     }
 
     public String getName() {
