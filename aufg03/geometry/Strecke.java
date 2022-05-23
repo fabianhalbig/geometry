@@ -1,5 +1,6 @@
 package geometry;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Strecke implements Comparator<Strecke> {
@@ -56,6 +57,26 @@ public class Strecke implements Comparator<Strecke> {
 	public int compare(Strecke strecke1, Strecke strecke2) {
 		// TODO Auto-generated method stub
 		return  Double.compare(strecke1.start.x, strecke2.start.x);
+	}
+	
+	public double yFuerX(double x) {
+		double y1 = this.start.y;
+		double y2 = this.end.y;
+		double x1 = this.start.x;
+		double x2 = this.start.x;
+		return (((y2-y1)/(x2-x1)*x)+(((x2*y1)-(x1*y2))/(x2-x1)));
+	}
+	
+	public Punkt schnittPunkt(Strecke strecke) {
+		double y1 = this.start.y;
+		double y2 = this.end.y;
+		double x1 = this.start.x;
+		double x2 = this.start.x;
+		
+		double a1 = (y2-y1)/(x2-x1);
+		double b1 = y1 - a1*x1;
+		double a2 = (y4-y3)/(x4-x3);
+		double b2 = y3 - a2*x3;
 	}
 
 	public Punkt getStart() {

@@ -13,7 +13,9 @@ public class main {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
-		String pathZuStrecken = "C:\\Users\\Cornelius\\Desktop\\Master Informatik Notebooks\\Computational_Geometry";
+		//String pathZuStrecken = "C:\\Users\\Cornelius\\Desktop\\Master Informatik Notebooks\\Computational_Geometry";
+		String pathZuStrecken = "C:\\Users\\Cornelius\\Desktop\\HM Master\\Computational_Geometry";
+
 		String s1000 = "\\s_1000_10.dat";
 
 		ArrayList<Strecke> strecken = einlesen(pathZuStrecken + s1000);
@@ -43,11 +45,30 @@ public class main {
 			}
 		});
 		
-		ArrayList<Punkt> sweepLine = new ArrayList<Punkt>();
+		ArrayList<Strecke> sweepLine = new ArrayList<Strecke>();
 		ArrayList<Punkt> schnittPunkte = new ArrayList<Punkt>();
 		
 		for(Punkt events:eventPunkte){
 			if(events.punkTyp == "start"){
+				Strecke segment = findByStart(strecken, events);
+				sweepLine.add(segment);
+				
+				//Neu Sortieren mit Betrachtung an x
+				Collections.sort(sweepLine, new Comparator<Strecke>() {
+					double x = segment.start.x;
+					@Override
+					public int compare(Strecke o1, Strecke o2) {
+						// TODO Auto-generated method stub
+						return Double.compare(o1.yFuerX(x), o2.yFuerX(x));
+					}
+				});
+				
+				if(sweepLine.size() < 1) {
+					if(sweepLine.size() < 2 && sweepLine.indexOf(segment) != 0 && sweepLine.indexOf(segment) != sweepLine.size()-1) {
+						Strecke segA = sweepLine.get(sweepLine.indexOf(segment)-1);
+						Strecke segB = sweepLine.get(sweepLine.indexOf(segment)+1);
+					}
+				}
 				/*
 				Let segE = E's segment;
 				Add segE to SL;
@@ -107,5 +128,13 @@ public class main {
 		}
 		scnr.close();
 		return strecken;
+	}
+	
+	public static Strecke findByStart(ArrayList<Strecke> listStrecke, Punkt punkt) {
+	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.start)).findFirst().orElse(null);
+	}
+	
+	public static Strecke findByEnd(ArrayList<Strecke> listStrecke, Punkt punkt) {
+	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.end)).findFirst().orElse(null);
 	}
 }
