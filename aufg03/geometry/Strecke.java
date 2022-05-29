@@ -63,20 +63,55 @@ public class Strecke implements Comparator<Strecke> {
 		double y1 = this.start.y;
 		double y2 = this.end.y;
 		double x1 = this.start.x;
-		double x2 = this.start.x;
-		return (((y2-y1)/(x2-x1)*x)+(((x2*y1)-(x1*y2))/(x2-x1)));
+		double x2 = this.end.x;
+		
+		/*
+		System.out.println("y1"+y1);
+		System.out.println("y2"+y2);
+		System.out.println("x1"+x1);
+		System.out.println("x2"+x2);
+		System.out.println("x"+x);
+		System.out.println((x2-x1)*x);
+		*/
+		
+		double result = (((y2-y1)/(x2-x1)*x)+(((x2*y1)-(x1*y2))/(x2-x1)));
+		
+		//System.out.println(result);
+		
+		return result;
 	}
 	
 	public Punkt schnittPunkt(Strecke strecke) {
 		double y1 = this.start.y;
 		double y2 = this.end.y;
 		double x1 = this.start.x;
-		double x2 = this.start.x;
+		double x2 = this.end.x;
+		double y3 = strecke.start.y;
+		double y4 = strecke.end.y;
+		double x3 = strecke.start.x;
+		double x4 = strecke.end.x;
 		
+		double s1_x = x2 - x1;     
+		double s1_y = y2 - y1;
+		double s2_x = x4 - x3;     
+		double s2_y = y4 - y3;
+		
+		double s, t;
+	    s = (-s1_y * (x1 - x3) + s1_x * (y1 - y3)) / (-s2_x * s1_y + s1_x * s2_y);
+	    t = ( s2_x * (y1 - y3) - s2_y * (x1 - x3)) / (-s2_x * s1_y + s1_x * s2_y);
+	    
+	    double schnittX = x1 + (t * s1_x);
+        
+        double schnittY = y1 + (t * s1_y);
+        
+        return new Punkt(schnittX, schnittY, "schnitt");
+		
+		/*
 		double a1 = (y2-y1)/(x2-x1);
 		double b1 = y1 - a1*x1;
 		double a2 = (y4-y3)/(x4-x3);
 		double b2 = y3 - a2*x3;
+		*/
 	}
 
 	public Punkt getStart() {
