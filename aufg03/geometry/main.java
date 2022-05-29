@@ -23,7 +23,47 @@ public class main {
 		
 		long starttime = System.nanoTime();
 		
+		ArrayList<Punkt> schnittPunkte2 = sweepLine(strecken);
 
+		
+		long endtime = System.nanoTime() - starttime;
+		
+		System.out.println("Aufgewendete Zeit: " + TimeUnit.MILLISECONDS.convert(endtime, TimeUnit.NANOSECONDS) + " ms");	
+
+		System.out.println("Es wurden " + schnittPunkte2.size() + " Schnittpunkte gefunden");
+		
+	}
+
+	public static ArrayList<Strecke> einlesen(String path) throws FileNotFoundException{
+		ArrayList<Strecke> strecken = new ArrayList<Strecke>();
+		
+		File file = new File(path);
+		Scanner scnr = new Scanner(file);
+		while(scnr.hasNextLine()){
+		   String line = scnr.nextLine();
+		   String[] points = line.split(" ");
+		   Punkt start = new Punkt(Double.parseDouble(points[0]),Double.parseDouble(points[1]), "start");
+		   Punkt end = new Punkt(Double.parseDouble(points[2]),Double.parseDouble(points[3]), "end");
+		   Strecke s = new Strecke(start, end);
+		   strecken.add(s);
+		}
+		scnr.close();
+		return strecken;
+	}
+	
+	public static Strecke findByStart(ArrayList<Strecke> listStrecke, Punkt punkt) {
+	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.start)).findFirst().orElse(null);
+	}
+	
+	public static Strecke findByEnd(ArrayList<Strecke> listStrecke, Punkt punkt) {
+	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.end)).findFirst().orElse(null);
+	}
+	
+	public static boolean almostEqual(double a, double b, double eps){
+	    return Math.abs(a-b)<eps;
+	}
+	
+	public static ArrayList<Punkt> sweepLine(ArrayList<Strecke> strecken){		
 		// Alle Start und Endpunkt als EVents hinzufügen und sortieren
 		ArrayList<Punkt> eventPunkte = new ArrayList<Punkt>();
 		for(Strecke strecke : strecken){
@@ -251,11 +291,6 @@ public class main {
 				 */
 			}
 		}
-
-		
-		long endtime = System.nanoTime() - starttime;
-		
-		System.out.println("Aufgewendete Zeit: " + TimeUnit.MILLISECONDS.convert(endtime, TimeUnit.NANOSECONDS) + " ms");	
 		
 		System.out.println("verbleibende Größe der Sweepline "+sweepLine.size());
 		
@@ -265,34 +300,6 @@ public class main {
 			System.out.println("Fehler");
 		}
 		
-	}
-
-	public static ArrayList<Strecke> einlesen(String path) throws FileNotFoundException{
-		ArrayList<Strecke> strecken = new ArrayList<Strecke>();
-		
-		File file = new File(path);
-		Scanner scnr = new Scanner(file);
-		while(scnr.hasNextLine()){
-		   String line = scnr.nextLine();
-		   String[] points = line.split(" ");
-		   Punkt start = new Punkt(Double.parseDouble(points[0]),Double.parseDouble(points[1]), "start");
-		   Punkt end = new Punkt(Double.parseDouble(points[2]),Double.parseDouble(points[3]), "end");
-		   Strecke s = new Strecke(start, end);
-		   strecken.add(s);
-		}
-		scnr.close();
-		return strecken;
-	}
-	
-	public static Strecke findByStart(ArrayList<Strecke> listStrecke, Punkt punkt) {
-	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.start)).findFirst().orElse(null);
-	}
-	
-	public static Strecke findByEnd(ArrayList<Strecke> listStrecke, Punkt punkt) {
-	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.end)).findFirst().orElse(null);
-	}
-	
-	public static boolean almostEqual(double a, double b, double eps){
-	    return Math.abs(a-b)<eps;
+		return schnittPunkte;
 	}
 }
