@@ -3,12 +3,12 @@ package geometry;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
+import common.Point;
 
 public class main {
 
@@ -23,7 +23,7 @@ public class main {
 		
 		long starttime = System.nanoTime();
 		
-		ArrayList<Punkt> schnittPunkte2 = sweepLine(strecken);
+		ArrayList<Point> schnittPunkte2 = sweepLine(strecken);
 
 		
 		long endtime = System.nanoTime() - starttime;
@@ -42,8 +42,8 @@ public class main {
 		while(scnr.hasNextLine()){
 		   String line = scnr.nextLine();
 		   String[] points = line.split(" ");
-		   Punkt start = new Punkt(Double.parseDouble(points[0]),Double.parseDouble(points[1]), "start");
-		   Punkt end = new Punkt(Double.parseDouble(points[2]),Double.parseDouble(points[3]), "end");
+		   Point start = new Point(Double.parseDouble(points[0]),Double.parseDouble(points[1]), "start");
+		   Point end = new Point(Double.parseDouble(points[2]),Double.parseDouble(points[3]), "end");
 		   Strecke s = new Strecke(start, end);
 		   strecken.add(s);
 		}
@@ -51,11 +51,11 @@ public class main {
 		return strecken;
 	}
 	
-	public static Strecke findByStart(ArrayList<Strecke> listStrecke, Punkt punkt) {
+	public static Strecke findByStart(ArrayList<Strecke> listStrecke, Point punkt) {
 	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.start)).findFirst().orElse(null);
 	}
 	
-	public static Strecke findByEnd(ArrayList<Strecke> listStrecke, Punkt punkt) {
+	public static Strecke findByEnd(ArrayList<Strecke> listStrecke, Point punkt) {
 	    return listStrecke.stream().filter(strecke -> punkt.equals(strecke.end)).findFirst().orElse(null);
 	}
 	
@@ -63,18 +63,18 @@ public class main {
 	    return Math.abs(a-b)<eps;
 	}
 	
-	public static ArrayList<Punkt> sweepLine(ArrayList<Strecke> strecken){		
-		// Alle Start und Endpunkt als EVents hinzufügen und sortieren
-		ArrayList<Punkt> eventPunkte = new ArrayList<Punkt>();
+	public static ArrayList<Point> sweepLine(ArrayList<Strecke> strecken){		
+		// Alle Start und Endpunkt als EVents hinzufï¿½gen und sortieren
+		ArrayList<Point> eventPunkte = new ArrayList<Point>();
 		for(Strecke strecke : strecken){
 			eventPunkte.add(strecke.start);
 			eventPunkte.add(strecke.end);
 		}
 		
-		Collections.sort(eventPunkte, new Comparator<Punkt>() {
+		Collections.sort(eventPunkte, new Comparator<Point>() {
 			@Override
-			public int compare(Punkt p1, Punkt p2) {
-				return Double.compare(p1.x, p2.x);
+			public int compare(Point p1, Point p2) {
+				return Double.compare(p1.getX(), p2.getX());
 			}
 		});
 		
@@ -86,8 +86,8 @@ public class main {
 				int indexEnd = eventPunkte.indexOf(strecke.end);
 				int streckenIndex = strecken.indexOf(strecke);
 				
-				Punkt newStart = new Punkt(strecke.end.x, strecke.end.y, "start");
-				Punkt newEnd = new Punkt(strecke.start.x, strecke.start.y, "end");
+				Point newStart = new Point(strecke.end.getX(), strecke.end.getY(), "start");
+				Point newEnd = new Point(strecke.start.getX(), strecke.start.getY(), "end");
 				
 				eventPunkte.set(indexEnd, newStart);
 				eventPunkte.set(indexStart, newEnd);
@@ -99,14 +99,14 @@ public class main {
 		}
 		
 		ArrayList<Strecke> sweepLine = new ArrayList<Strecke>();
-		ArrayList<Punkt> schnittPunkte = new ArrayList<Punkt>();
+		ArrayList<Point> schnittPunkte = new ArrayList<Point>();
 		
 		// Durchlaufen aller angelegter Eventpunkt
 		for(int i = 0; i < eventPunkte.size(); i++)
 		{
-			Punkt events = eventPunkte.get(i);
+			Point events = eventPunkte.get(i);
 			
-			if(events.punkTyp == "start"){
+			if(events.getPunkTyp() == "start"){
 				
 				/*
 				Let segE = E's segment;
@@ -127,7 +127,7 @@ public class main {
 				
 				//Neu Sortieren nach y mit Betrachtung an x
 				Collections.sort(sweepLine, new Comparator<Strecke>() {
-					double x = segment.start.x;
+					double x = segment.start.getX();
 					@Override
 					public int compare(Strecke o1, Strecke o2) {
 						// TODO Auto-generated method stub
@@ -150,17 +150,17 @@ public class main {
 				}
 				
 				
-				//Überprüfen ob es einen Schnitt mit A oder B gibt
-				if(segA != null && segment.ccw(segA)){
+				//ï¿½berprï¿½fen ob es einen Schnitt mit A oder B gibt
+				if(segA != null && segment.doIntersect(segA)){
 					eventPunkte.add(eventPunkte.indexOf(events)+1, segment.schnittPunkt(segA));
 				}
-				if(segB != null && segment.ccw(segB)){
+				if(segB != null && segment.doIntersect(segB)){
 					eventPunkte.add(eventPunkte.indexOf(events)+1, segment.schnittPunkt(segB));
 				}
 			}
 			
 			
-			if(events.punkTyp == "end"){
+			if(events.getPunkTyp() == "end"){
 							/*
 							TreatRightEndpoint() {
 							Let segE = E's segment;
@@ -192,9 +192,9 @@ public class main {
 				}
 				
 				
-				//Überprüfen von Schnitt zwischen A und B
-				if(segA != null && segB != null && segB.ccw(segA)){
-					Punkt schnitt = segB.schnittPunkt(segA);
+				//ï¿½berprï¿½fen von Schnitt zwischen A und B
+				if(segA != null && segB != null && segB.doIntersect(segA)){
+					Point schnitt = segB.schnittPunkt(segA);
 					if(!schnittPunkte.contains(schnitt)){
 						eventPunkte.add(eventPunkte.indexOf(events)+1, segB.schnittPunkt(segA));
 					}
@@ -204,7 +204,7 @@ public class main {
 				
 				//Neu Sortieren nach y mit Betrachtung an x
 				Collections.sort(sweepLine, new Comparator<Strecke>() {
-					double x = segment.end.x;
+					double x = segment.end.getX();
 					@Override
 					public int compare(Strecke o1, Strecke o2) {
 						// TODO Auto-generated method stub
@@ -214,7 +214,7 @@ public class main {
 			}
 			
 			
-			if(events.punkTyp == "schnitt"){
+			if(events.getPunkTyp() == "schnitt"){
 				schnittPunkte.add(events);
 				
 				ArrayList<Strecke> schnittStrecken = new ArrayList<Strecke>();
@@ -224,7 +224,7 @@ public class main {
 				Strecke segB = null;
 				
 				for(Strecke line:sweepLine){
-					if(almostEqual(line.yFuerX(events.x),  events.y, 0.001)){
+					if(almostEqual(line.yFuerX(events.getX()),  events.getY(), 0.001)){
 						schnittStrecken.add(line);						
 					}
 					if(schnittStrecken.size() == 2){
@@ -239,7 +239,7 @@ public class main {
 				
 				//Neu Sortieren nach y mit Betrachtung an x
 				Collections.sort(sweepLine, new Comparator<Strecke>() {
-					double x = (events.x + eventPunkte.get(eventPunkte.indexOf(events) + 1).x) /2;
+					double x = (events.getX() + eventPunkte.get(eventPunkte.indexOf(events) + 1).getX()) /2;
 					@Override
 					public int compare(Strecke o1, Strecke o2) {
 						// TODO Auto-generated method stub
@@ -257,8 +257,8 @@ public class main {
 					else if (sweepLine.indexOf(segE2) == 0) {
 						segA = sweepLine.get(sweepLine.indexOf(segE2)+1);
 						
-						if(segA != null && segE2.ccw(segA)){
-							Punkt schnitt = segE2.schnittPunkt(segA);
+						if(segA != null && segE2.doIntersect(segA)){
+							Point schnitt = segE2.schnittPunkt(segA);
 							if(!schnittPunkte.contains(schnitt)){
 								eventPunkte.add(eventPunkte.indexOf(events)+1, segE2.schnittPunkt(segA));
 							}
@@ -267,8 +267,8 @@ public class main {
 					else if (sweepLine.indexOf(segE1) == sweepLine.size()-1) {
 						segA = sweepLine.get(sweepLine.indexOf(segE1)-1);
 						
-						if(segA != null && segE1.ccw(segA)){
-							Punkt schnitt = segE1.schnittPunkt(segA);
+						if(segA != null && segE1.doIntersect(segA)){
+							Point schnitt = segE1.schnittPunkt(segA);
 							if(!schnittPunkte.contains(schnitt)){
 								eventPunkte.add(eventPunkte.indexOf(events)+1, segE1.schnittPunkt(segA));
 							}
@@ -292,7 +292,7 @@ public class main {
 			}
 		}
 		
-		System.out.println("verbleibende Größe der Sweepline "+sweepLine.size());
+		System.out.println("verbleibende Grï¿½ï¿½e der Sweepline "+sweepLine.size());
 		
 		if((strecken.size()*2 + schnittPunkte.size()) == eventPunkte.size()){
 			System.out.println("Alle Punkte abgearbeitet!");

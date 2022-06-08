@@ -9,10 +9,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import common.Point;
 
 
 
@@ -20,20 +23,26 @@ public class Main2 {
 
     public static void main(String[] args) throws IOException {
 
-    	String path = "02/data/DeutschlandMitStaedten.svg";
+    	String path = "aufg02\\data\\DeutschlandMitStaedten.svg";
+
 		
 		ArrayList<Bundesland> states = readFile(path);
+		
 		ArrayList<City> cities = getCities(path);
-
 		sysoutAreaOfState(states);
 		System.out.println("----------------------------");
+		Collections.shuffle(cities); //make sure output does not depend on order of input
 		sysoutCityAndState(states, cities);
 
 	}
 
+
+
+
+
 	public static void sysoutAreaOfState(ArrayList<Bundesland> states) {
-		for (Bundesland state:states) {
-			System.out.println("Fläche von " + state.getName() + ": " + state.getArea());
+		for (Bundesland s: states) {
+			System.out.println(s.getName() + "|" + s.getAreaOfState());
 		}
 	}
 
@@ -44,9 +53,9 @@ public class Main2 {
 			for(Bundesland b:states) {
 				if (b.bundeslandContainsCity(cities.get(0).getPoint())) {
 					if (cityInState.get(cities.get(0)) != null &&
-					 cityInState.get(cities.get(0)).getArea() > b.getArea()) {
+					 cityInState.get(cities.get(0)).getAreaOfState() > b.getAreaOfState()) {
 						cityInState.put(cities.get(0), b);
-					}
+					}  
 					if (cityInState.put(cities.get(0), b) == null) {
 						cityInState.put(cities.get(0), b);
 					}
@@ -128,6 +137,8 @@ public class Main2 {
 								.split(",")[0]) , Double.parseDouble(point.substring(1)
 								.split(",")[1]));
 								pointsForPolygon.add(newPoint);
+								standPunkt.setX(newPoint.getX());
+								standPunkt.setY(newPoint.getY());
 							} else {
 								Point newPoint = new Point(Double.parseDouble(point.substring(1)
 								.split(",")[0]) , Double.parseDouble(point.substring(1)

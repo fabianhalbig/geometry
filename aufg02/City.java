@@ -1,3 +1,5 @@
+import common.Point;
+
 public class City {
 
     String name;
